@@ -3,6 +3,7 @@ JSON format:
 
 {
   "pdf": "angezeigtpdf.pdf",
+  
   "kategorien": [
   
     {"buchstabe": "A", "name": "Märsche"},
