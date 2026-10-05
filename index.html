@@ -15,11 +15,15 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
 main{max-width:640px;margin:0 auto;padding:12px}
-.bar{display:flex;gap:8px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:8px 0;z-index:5}
-input,button.sort{font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:8px;padding:11px 12px}
-input{flex:1;min-width:0}
-button.sort{white-space:nowrap;cursor:pointer;text-align:left;line-height:1.2;font-size:14px}
-button.sort small{display:block;color:var(--mute);font-size:12px}
+.bar{--searchH:44px;display:flex;flex-direction:column;gap:6px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:8px 0;z-index:5}
+.searchwrap{position:relative}
+input,button.sort{font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:8px}
+input{display:block;width:100%;height:var(--searchH);padding:0 34px 0 12px}
+input::-webkit-search-cancel-button,input::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
+input::-ms-clear{display:none}
+.clearBtn{position:absolute;top:0;right:0;width:var(--searchH);height:var(--searchH);border:0;background:none;color:var(--mute);font-size:20px;line-height:1;cursor:pointer;display:none}
+.clearBtn.show{display:block}
+button.sort{display:block;width:100%;height:calc(var(--searchH)/2);padding:0 10px;cursor:pointer;text-align:left;line-height:1;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 :focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 details{background:var(--card);border:2px solid var(--ink);border-radius:8px;margin:10px 0}
 details.pdf{border-color:var(--acc)}
@@ -53,7 +57,10 @@ li.flash{animation:fl 1.6s}
 <body>
 <main>
   <div class="bar">
-    <input id="q" type="search" placeholder="Titel oder Nummer suchen (z. B. A12)" autocomplete="off" aria-label="Suche">
+    <div class="searchwrap">
+      <input id="q" type="search" placeholder="Titel oder Nummer suchen (z. B. A12)" autocomplete="off" aria-label="Suche">
+      <button id="clearBtn" class="clearBtn" type="button" aria-label="Suche löschen">×</button>
+    </div>
     <button id="sortBtn" class="sort" type="button"></button>
   </div>
   <div id="root"></div>
@@ -65,7 +72,7 @@ li.flash{animation:fl 1.6s}
 <script>
 let DATA, byCode;
 const $ = s => document.querySelector(s);
-const root = $('#root'), qEl = $('#q'), sortBtn = $('#sortBtn'), themeBtn = $('#themeBtn');
+const root = $('#root'), qEl = $('#q'), sortBtn = $('#sortBtn'), themeBtn = $('#themeBtn'), clearBtn = $('#clearBtn');
 const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 // Trag hier einen Text ein (z. B. "Modus"), wenn der Knopf zusätzlich zum Symbol
@@ -116,7 +123,8 @@ function section(id, title, count, body, forceOpen, cls = '') {
 function render() {
   if (!DATA) return;
   const q = norm(qEl.value.trim());
-  sortBtn.innerHTML = `Sortierung<small>${sortMode === 'nr' ? 'nach Nummer' : 'alphabetisch'}<br>Tippen zum Wechseln</small>`;
+  sortBtn.textContent = `Sortierung: ${sortMode === 'nr' ? 'nach Nummer' : 'alphabetisch'} (tippen zum Wechseln)`;
+  clearBtn.classList.toggle('show', !!qEl.value);
   let html = '';
 
   // 1) Festprogramm-PDF
@@ -168,6 +176,7 @@ root.addEventListener('click', e => {
 
 sortBtn.addEventListener('click', () => { if (!DATA) return; sortMode = sortMode === 'nr' ? 'az' : 'nr'; render(); });
 qEl.addEventListener('input', render);
+clearBtn.addEventListener('click', () => { qEl.value = ''; qEl.focus(); render(); });
 
 fetch('noten.json', {cache: 'no-cache'})
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
