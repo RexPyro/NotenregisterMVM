@@ -7,10 +7,10 @@
 <script>try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&display=swap">
 <style>
-:root{--bg:#f2f4f7;--card:#fff;--ink:#1b2430;--mute:#66707d;--line:#cfd5dd;--acc:#3a47c9;--mark:#ffe27a;--code:#8a6317;
+:root{--bg:#f2f4f7;--card:#fff;--ink:#1b2430;--mute:#66707d;--line:#cfd5dd;--acc:#3a47c9;--mark:#ffe27a;--code:#8a6317;--cardA:rgba(255,255,255,.88);
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a22;--card:#1d2530;--ink:#e8ecf1;--mute:#93a0af;--line:#33404f;--acc:#8b95ff;--mark:#6b5a12;--code:#e0b968}}
-:root[data-theme="dark"]{--bg:#141a22;--card:#1d2530;--ink:#e8ecf1;--mute:#93a0af;--line:#33404f;--acc:#8b95ff;--mark:#6b5a12;--code:#e0b968}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a22;--card:#1d2530;--ink:#e8ecf1;--mute:#93a0af;--line:#33404f;--acc:#8b95ff;--mark:#6b5a12;--code:#e0b968;--cardA:rgba(29,37,48,.88)}}
+:root[data-theme="dark"]{--bg:#141a22;--card:#1d2530;--ink:#e8ecf1;--mute:#93a0af;--line:#33404f;--acc:#8b95ff;--mark:#6b5a12;--code:#e0b968;--cardA:rgba(29,37,48,.88)}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
@@ -34,10 +34,12 @@ details[open]>summary::after{transform:rotate(-135deg)}
 details.pdf summary,details.pdf a{color:var(--acc)}
 .cnt{color:var(--mute);font-weight:400;font-size:14px;margin-left:auto}
 ul,ol{list-style:none;margin:0;padding:0 0 6px;border-top:1px solid var(--line)}
-li{display:flex;gap:12px;align-items:baseline;padding:9px 14px;border-bottom:1px solid var(--line)}
+li{display:flex;gap:12px;align-items:flex-start;padding:9px 14px;border-bottom:1px solid var(--line)}
 li:last-child{border-bottom:0}
-.code{font-weight:600;color:var(--code);min-width:3.6em;font-variant-numeric:tabular-nums;background:none;border:0;padding:0;font-size:inherit;text-align:left}
+.codecol{display:flex;flex-direction:column;gap:3px;min-width:3.6em}
+.code{font-weight:600;color:var(--code);font-variant-numeric:tabular-nums;background:none;border:0;padding:0;font-size:inherit;text-align:left}
 button.code{cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.detailsLink{background:none;border:0;padding:0;margin:0;color:var(--acc);text-decoration:underline;text-underline-offset:2px;font-size:12px;cursor:pointer;text-align:left}
 .nr{color:var(--mute);min-width:2em;text-align:right;font-variant-numeric:tabular-nums}
 .t{font-family:"Source Serif 4",Georgia,serif;flex:1}
 .sub{display:block;color:var(--mute);font:13px system-ui,sans-serif}
@@ -51,6 +53,13 @@ li.flash{animation:fl 1.6s}
 .bottomRow{display:flex;justify-content:space-between;align-items:center;margin:14px 0 4px}
 .roundbtn{display:flex;align-items:center;justify-content:center;gap:7px;height:46px;min-width:46px;padding:0 13px;font:inherit;font-weight:600;font-size:14px;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:10px;cursor:pointer}
 .roundbtn.icononly{padding:0;width:46px;font-size:19px}
+.modalBackdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:30;display:none;align-items:center;justify-content:center;padding:48px 16px}
+.modalBackdrop.show{display:flex}
+.modalCard{position:relative;width:100%;max-width:420px;max-height:80vh;overflow:auto;background:var(--cardA);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:2px solid var(--ink);border-radius:18px;padding:24px 20px 18px}
+.modalClose{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:2px solid var(--ink);background:var(--card);color:var(--ink);font-size:15px;line-height:1;cursor:pointer}
+.drow{padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.drow:first-child{border-top:0;padding-top:0}
+.drow b{font-weight:700}
 @media (prefers-reduced-motion:reduce){summary::after{transition:none}li.flash{animation:none;background:var(--mark)}}
 </style>
 </head>
@@ -70,12 +79,20 @@ li.flash{animation:fl 1.6s}
   </div>
 </main>
 
+<div id="modalBackdrop" class="modalBackdrop">
+  <div class="modalCard">
+    <button id="modalClose" class="modalClose" type="button" aria-label="Schließen">×</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
 
 
 <script>
 let DATA, byCode;
 const $ = s => document.querySelector(s);
 const root = $('#root'), qEl = $('#q'), sortBtn = $('#sortBtn'), themeBtn = $('#themeBtn'), clearBtn = $('#clearBtn'), topBtn = $('#topBtn');
+const modalBackdrop = $('#modalBackdrop'), modalBody = $('#modalBody'), modalClose = $('#modalClose');
 const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 // Trag hier einen Text ein (z. B. "Modus"), wenn der Knopf zusätzlich zum Symbol
@@ -131,6 +148,32 @@ function ortText(ort) {
   return `${schrank}, ${ort.fach}. Fach von oben`;
 }
 
+// Baut aus {status:'ok'|'fehlt'|'keine_info', detail:'...'} den Anzeigetext.
+function statusText(obj, labelOk, labelFehlt) {
+  const status = obj && obj.status;
+  if (status === 'ok') return `✅ ${labelOk}`;
+  if (status === 'fehlt') return `🚫 ${labelFehlt}${obj.detail ? ': ' + esc(obj.detail) : ''}`;
+  return '❔ Keine Info';
+}
+
+function openDetails(nr) {
+  const s = byCode[nr];
+  if (!s) return;
+  const kat = DATA.kategorien.find(k => k.buchstabe === nr[0]);
+  const rows = [
+    ['Titel', esc(s.titel)],
+    ['Komponist/Arrangeur', s.komponist ? esc(s.komponist) : '–'],
+    ['Ablageort', s.ort ? esc(ortText(s.ort)) : '–'],
+    ['Nummer', esc(s.nr)],
+    ['Kategorie', kat ? esc(kat.name) : '–'],
+    ['Vollständigkeit', statusText(s.vollstaendigkeit, 'vollständig', 'unvollständig')],
+    ['Ausgabebereit', statusText(s.ausgabebereit, 'Alles kopiert', 'Kopien fehlen')]
+  ];
+  modalBody.innerHTML = rows.map(([k, v]) => `<div class="drow"><b>${k}:</b> ${v}</div>`).join('');
+  modalBackdrop.classList.add('show');
+}
+function closeDetails() { modalBackdrop.classList.remove('show'); }
+
 function section(id, title, count, body, forceOpen, cls = '') {
   const open = forceOpen ?? openSet.has(id);
   return `<details data-id="${id}" class="${cls}" ${open ? 'open' : ''}><summary>${title}<span class="cnt">${count}</span></summary>${body}</details>`;
@@ -162,7 +205,7 @@ function render() {
     if (q && !items.length) return;
     hits += items.length;
     items.sort(sortMode === 'nr' ? byNr : byAz);
-    const rows = items.map(s => `<li id="p-${s.nr}"><span class="code">${hl(s.nr, q)}</span><span class="t">${hl(s.titel, q)}${s.ort ? `<span class="sub">${esc(ortText(s.ort))}</span>` : ''}</span></li>`).join('');
+    const rows = items.map(s => `<li id="p-${s.nr}"><span class="codecol"><span class="code">${hl(s.nr, q)}</span><button class="detailsLink" type="button" data-details="${s.nr}">Details</button></span><span class="t">${hl(s.titel, q)}${s.ort ? `<span class="sub">${esc(ortText(s.ort))}</span>` : ''}</span></li>`).join('');
     html += section(k.buchstabe, `${k.buchstabe} – ${esc(k.name)}`, items.length, `<ul>${rows || '<li>Noch keine Stücke</li>'}</ul>`, q ? true : undefined);
   });
 
@@ -180,6 +223,8 @@ root.addEventListener('toggle', e => {
 
 // Klick auf Notensatz-Nummer im Programm -> springt zum Stück
 root.addEventListener('click', e => {
+  const d = e.target.closest('[data-details]');
+  if (d) { openDetails(d.dataset.details); return; }
   const b = e.target.closest('[data-goto]');
   if (!b) return;
   const code = b.dataset.goto;
@@ -189,6 +234,11 @@ root.addEventListener('click', e => {
   const li = document.getElementById('p-' + code);
   if (li) { li.scrollIntoView({block: 'center'}); li.classList.add('flash'); }
 });
+
+// Fenster schließen: X-Knopf, Tippen auf den Rand (oben/unten/seitlich), oder Escape
+modalClose.addEventListener('click', closeDetails);
+modalBackdrop.addEventListener('click', e => { if (e.target === modalBackdrop) closeDetails(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetails(); });
 
 sortBtn.addEventListener('click', () => { if (!DATA) return; sortMode = sortMode === 'nr' ? 'az' : 'nr'; render(); });
 qEl.addEventListener('input', render);

@@ -11,8 +11,8 @@
     {"buchstabe": "H", "name": "Sonstiges"}
   ],
   "stuecke": [
-    {"nr": "A1", "titel": "Alte Kameraden", "ort": {"schrank": "WR", "fach": "oben", "pos": "hinten"}},
-    {"nr": "A2", "titel": "Der Königgrätzer", "ort": {"schrank": "WL", "fach": "unten", "pos": "vorne"}},
+    {"nr": "A1", "titel": "Alte Kameraden", "komponist": "C. Teike, Arr. Siegfried Rundel", "ort": {"schrank": "WR", "fach": "oben", "pos": "hinten"}, "vollstaendigkeit": {"status": "fehlt", "detail": "2. Klarinette"}, "ausgabebereit": {"status": "fehlt", "detail": "1. Horn, Barisax, Timpani"}},
+    {"nr": "A2", "titel": "Neue Kameraden", "komponist": "Mozart, Arr. Siegfried Rundel", "ort": {"schrank": "WL", "fach": "unten", "pos": "vorne"}, "vollstaendigkeit": {"status": "ok"}, "ausgabebereit": {"status": "keine_info"}},
     {"nr": "A3", "titel": "Radetzky-Marsch", "ort": {"schrank": "WL", "fach": "mitte", "pos": "hinten"}},
     {"nr": "A4", "titel": "The Stars and Stripes Forever", "ort": {"schrank": "ON", "fach": 1}},
     {"nr": "A12", "titel": "Preußens Gloria", "ort": {"schrank": "UN", "fach": 5}},
