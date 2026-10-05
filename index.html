@@ -113,7 +113,20 @@ function hl(text, q) {
   if (i < 0) return esc(text);
   return esc(text.slice(0, i)) + '<mark>' + esc(text.slice(i, i + q.length)) + '</mark>' + esc(text.slice(i + q.length));
 }
-const matches = (s, q) => !q || norm(s.titel).includes(q) || norm(s.nr).includes(q) || norm(s.komponist || '').includes(q);
+const matches = (s, q) => !q || norm(s.titel).includes(q) || norm(s.nr).includes(q);
+
+// Baut aus dem strukturierten "ort"-Objekt den Anzeigetext.
+// Schranknamen (Groß-/Kleinschreibung hier zentral festgelegt):
+const SCHRAENKE = {ON: 'Oberer Notenschrank', UN: 'Unterer Notenschrank', WR: 'Wandschrank rechts', WL: 'Wandschrank links'};
+const FAECHER = {oben: 'oberes', mitte: 'mittleres', unten: 'unteres'};
+function ortText(ort) {
+  if (!ort) return '';
+  const schrank = SCHRAENKE[ort.schrank] || ort.schrank;
+  if (ort.schrank === 'WR' || ort.schrank === 'WL') {
+    return `${schrank}, ${FAECHER[ort.fach] || ort.fach} Fach, ${ort.pos}`;
+  }
+  return `${schrank}, ${ort.fach}. Fach von oben`;
+}
 
 function section(id, title, count, body, forceOpen, cls = '') {
   const open = forceOpen ?? openSet.has(id);
@@ -146,7 +159,7 @@ function render() {
     if (q && !items.length) return;
     hits += items.length;
     items.sort(sortMode === 'nr' ? byNr : byAz);
-    const rows = items.map(s => `<li id="p-${s.nr}"><span class="code">${hl(s.nr, q)}</span><span class="t">${hl(s.titel, q)}${s.komponist ? `<span class="sub">${hl(s.komponist, q)}</span>` : ''}</span></li>`).join('');
+    const rows = items.map(s => `<li id="p-${s.nr}"><span class="code">${hl(s.nr, q)}</span><span class="t">${hl(s.titel, q)}${s.ort ? `<span class="sub">${esc(ortText(s.ort))}</span>` : ''}</span></li>`).join('');
     html += section(k.buchstabe, `${k.buchstabe} – ${esc(k.name)}`, items.length, `<ul>${rows || '<li>Noch keine Stücke</li>'}</ul>`, q ? true : undefined);
   });
 
