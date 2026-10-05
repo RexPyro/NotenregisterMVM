@@ -48,9 +48,9 @@ li.flash{animation:fl 1.6s}
 .pdfbody a{font-weight:600}
 .pdfbody iframe{width:100%;height:60vh;border:1px solid var(--line);border-radius:6px;margin-top:10px;background:#fff}
 .empty{text-align:center;color:var(--mute);padding:24px 0}
-.themewrap{display:flex;justify-content:flex-end;margin:14px 0 4px}
-.themebtn{display:flex;align-items:center;justify-content:center;gap:7px;height:46px;min-width:46px;padding:0 13px;font:inherit;font-weight:600;font-size:14px;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:10px;cursor:pointer}
-.themebtn.icononly{padding:0;width:46px;font-size:19px}
+.bottomRow{display:flex;justify-content:space-between;align-items:center;margin:14px 0 4px}
+.roundbtn{display:flex;align-items:center;justify-content:center;gap:7px;height:46px;min-width:46px;padding:0 13px;font:inherit;font-weight:600;font-size:14px;color:var(--ink);background:var(--card);border:2px solid var(--ink);border-radius:10px;cursor:pointer}
+.roundbtn.icononly{padding:0;width:46px;font-size:19px}
 @media (prefers-reduced-motion:reduce){summary::after{transition:none}li.flash{animation:none;background:var(--mark)}}
 </style>
 </head>
@@ -64,7 +64,10 @@ li.flash{animation:fl 1.6s}
     <button id="sortBtn" class="sort" type="button"></button>
   </div>
   <div id="root"></div>
-  <div class="themewrap"><button id="themeBtn" class="themebtn" type="button"></button></div>
+  <div class="bottomRow">
+    <button id="topBtn" class="roundbtn icononly" type="button" aria-label="Nach oben">↑</button>
+    <button id="themeBtn" class="roundbtn" type="button"></button>
+  </div>
 </main>
 
 
@@ -72,7 +75,7 @@ li.flash{animation:fl 1.6s}
 <script>
 let DATA, byCode;
 const $ = s => document.querySelector(s);
-const root = $('#root'), qEl = $('#q'), sortBtn = $('#sortBtn'), themeBtn = $('#themeBtn'), clearBtn = $('#clearBtn');
+const root = $('#root'), qEl = $('#q'), sortBtn = $('#sortBtn'), themeBtn = $('#themeBtn'), clearBtn = $('#clearBtn'), topBtn = $('#topBtn');
 const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 // Trag hier einen Text ein (z. B. "Modus"), wenn der Knopf zusätzlich zum Symbol
@@ -190,6 +193,7 @@ root.addEventListener('click', e => {
 sortBtn.addEventListener('click', () => { if (!DATA) return; sortMode = sortMode === 'nr' ? 'az' : 'nr'; render(); });
 qEl.addEventListener('input', render);
 clearBtn.addEventListener('click', () => { qEl.value = ''; qEl.focus(); render(); });
+topBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
 
 fetch('noten.json', {cache: 'no-cache'})
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
