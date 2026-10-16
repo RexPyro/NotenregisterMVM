@@ -172,8 +172,28 @@ function openDetails(nr) {
   ];
   modalBody.innerHTML = rows.map(([k, v]) => `<div class="drow"><b>${k}:</b> ${v}</div>`).join('');
   modalBackdrop.classList.add('show');
+  lockScroll();
 }
-function closeDetails() { modalBackdrop.classList.remove('show'); }
+// Hintergrund fixieren, solange das Fenster offen ist (wirkt gegen Wischen,
+// Mausrad und Scrollbar gleichermaßen). Scrollposition wird beim Schließen
+// wiederhergestellt.
+let lockedScrollY = 0;
+function lockScroll() {
+  lockedScrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top = `-${lockedScrollY}px`;
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+}
+function unlockScroll() {
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  window.scrollTo(0, lockedScrollY);
+}
+
+function closeDetails() { modalBackdrop.classList.remove('show'); unlockScroll(); }
 
 function section(id, title, count, body, forceOpen, cls = '') {
   const open = forceOpen ?? openSet.has(id);
