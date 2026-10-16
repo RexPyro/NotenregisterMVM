@@ -947,7 +947,7 @@
     {"nr": "I149", "titel": "Platzhalter", "ort": {"schrank": "ON", "fach": "6"}},
     {"nr": "I150", "titel": "Platzhalter", "ort": {"schrank": "ON", "fach": "6"}},
     {"nr": "I151", "titel": "Platzhalter", "ort": {"schrank": "ON", "fach": "6"}},
-    {"nr": "I152", "titel": "Platzhalter", "ort": {"schrank": "ON", "fach": "6"}},
+    {"nr": "I152", "titel": "Platzhalter", "ort": {"schrank": "ON", "fach": "6"}}
   ],
   "programm": [
     {"nr": 1, "code": "A3"},
