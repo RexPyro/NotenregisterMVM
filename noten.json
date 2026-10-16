@@ -2,33 +2,39 @@
   "pdf": "SortierungInnerhalbEinesStückes.pdf",
   "kategorien": [
     {"buchstabe": "A", "name": "Märsche"},
-    {"buchstabe": "B", "name": "Ouvertüren"},
-    {"buchstabe": "C", "name": "Polkas und Walzer"},
-    {"buchstabe": "D", "name": "Konzertwerke"},
-    {"buchstabe": "E", "name": "Musical und Film"},
-    {"buchstabe": "F", "name": "Pop und Rock"},
-    {"buchstabe": "G", "name": "Choräle und Kirchliches"},
-    {"buchstabe": "H", "name": "Sonstiges"}
+    {"buchstabe": "B", "name": "B kateo"},
+    {"buchstabe": "C", "name": "C fraageee"},
+    {"buchstabe": "D", "name": "pürree"},
+    {"buchstabe": "E", "name": "rush E"},
+    {"buchstabe": "F", "name": "F wie frage"},
+    {"buchstabe": "H", "name": "Kirche oder so"},
+    {"buchstabe": "I", "name": "Jugenddings"}
   ],
   "stuecke": [
-    {"nr": "A1", "titel": "Alte Kameraden", "komponist": "C. Teike, Arr. Siegfried Rundel", "ort": {"schrank": "WR", "fach": "oben", "pos": "hinten"}, "vollstaendigkeit": {"status": "fehlt", "detail": "2. Klarinette"}, "ausgabebereit": {"status": "fehlt", "detail": "1. Horn, Barisax, Timpani"}},
-    {"nr": "A2", "titel": "Neue Kameraden", "komponist": "Mozart, Arr. Siegfried Rundel", "ort": {"schrank": "WL", "fach": "unten", "pos": "vorne"}, "vollstaendigkeit": {"status": "ok"}, "ausgabebereit": {"status": "keine_info"}},
-    {"nr": "A3", "titel": "Radetzky-Marsch", "ort": {"schrank": "WL", "fach": "mitte", "pos": "hinten"}},
-    {"nr": "A4", "titel": "The Stars and Stripes Forever", "ort": {"schrank": "ON", "fach": 1}},
-    {"nr": "A12", "titel": "Preußens Gloria", "ort": {"schrank": "UN", "fach": 5}},
-    {"nr": "A44", "titel": "Das Fähnlein der Sieben Aufrechten"},
+    {"nr": "A000", "titel": "Radetzky-Marsch", "ort": {"schrank": "ON", "fach": "3"}},
+    {"nr": "A00", "titel": "Radetzky-Marsch", "ort": {"schrank": "ON", "fach": "4"}},
+    {"nr": "A0", "titel": "The Stars and Stripes Forever", "ort": {"schrank": "ON", "fach": 1}},
+    {"nr": "A1", "titel": "Preußens Gloria", "ort": {"schrank": "ON", "fach": 6}},
+    {"nr": "A2", "titel": "Das Fähnlein der Sieben Aufrechten", "ort": {"schrank": "ON", "fach": "4"}},
+    
     {"nr": "B1", "titel": "Die Dichter und Bauern"},
     {"nr": "B3", "titel": "Leichte Kavallerie"},
     {"nr": "B5", "titel": "The Barber of Seville"},
+    
     {"nr": "C1", "titel": "Böhmische Liebe"},
     {"nr": "C2", "titel": "Die Post im Walde"},
     {"nr": "C44", "titel": "Ein Traum von Wien"},
+    
     {"nr": "D1", "titel": "Pomp and Circumstance"},
+    
     {"nr": "E1", "titel": "The Lion King"},
     {"nr": "E2", "titel": "Das Phantom der Oper"},
+    
     {"nr": "F1", "titel": "The Rose"},
-    {"nr": "G1", "titel": "Großer Gott, wir loben dich"},
-    {"nr": "H1", "titel": "Zum Geburtstag viel Glück"}
+    
+    {"nr": "H1", "titel": "Großer Gott, wir loben dich"},
+    
+    {"nr": "I1", "titel": "Zum Geburtstag viel Glück"}
   ],
   "programm": [
     {"nr": 1, "code": "A3"},
