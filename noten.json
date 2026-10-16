@@ -2,13 +2,13 @@
   "pdf": "SortierungInnerhalbEinesStückes.pdf",
   "kategorien": [
     {"buchstabe": "A", "name": "Märsche"},
-    {"buchstabe": "B", "name": "B kateo"},
-    {"buchstabe": "C", "name": "C fraageee"},
-    {"buchstabe": "D", "name": "pürree"},
-    {"buchstabe": "E", "name": "rush E"},
-    {"buchstabe": "F", "name": "F wie frage"},
-    {"buchstabe": "H", "name": "Kirche oder so"},
-    {"buchstabe": "I", "name": "Jugenddings"}
+    {"buchstabe": "B", "name": "Potpourries/Dixies"},
+    {"buchstabe": "C", "name": "Polkas"},
+    {"buchstabe": "D", "name": "Walzer"},
+    {"buchstabe": "E", "name": "Solostücke"},
+    {"buchstabe": "F", "name": "Ouvertüren/Konzertante Stücke"},
+    {"buchstabe": "H", "name": "Liedhefte/Weihnachtslieder"},
+    {"buchstabe": "I", "name": "Juka"}
   ],
   "stuecke": [
     {"nr": "A000", "titel": "Radetzky-Marsch", "ort": {"schrank": "ON", "fach": "1"}},
