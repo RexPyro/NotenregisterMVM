@@ -11,12 +11,16 @@
     {"buchstabe": "I", "name": "Juka"}
   ],
   "stuecke": [
-    {"nr": "A000", "titel": "Radetzky-Marsch", "ort": {"schrank": "ON", "fach": "1"}},
-    {"nr": "A00", "titel": "Radetzky-Marsch", "ort": {"schrank": "ON", "fach": "1"}},
-    {"nr": "A0", "titel": "The Stars and Stripes Forever", "ort": {"schrank": "ON", "fach": 1}},
-    {"nr": "A1", "titel": "Preußens Gloria", "ort": {"schrank": "ON", "fach": 1}},
-    {"nr": "A2", "titel": "Das Fähnlein der Sieben Aufrechten", "ort": {"schrank": "ON", "fach": "1"}},
-    {"nr": "A3", "titel": "Platzhalter", "ort": {"schrank": "ON", "fach": "1"}},
+    {"nr": "A000", "titel": "Ein Prosit", "ort": {"schrank": "ON", "fach": "1"}},
+    {"nr": "A00", "titel": "20 Tune Up's", "ort": {"schrank": "ON", "fach": "1"}},
+    {"nr": "A0", "titel": "Acht Klangstudien (Acht Klankstudies)", "ort": {"schrank": "ON", "fach": 1}},
+    {"nr": "A1", "titel": "Alte Kameraden", "ort": {"schrank": "ON", "fach": 1}},
+    {"nr": "A2", "titel": "Vier leichte Märsche", "ort": {"schrank": "ON", "fach": "1"}},
+    {"nr": "A2", "titel": "Am schönen Oberrhein", "ort": {"schrank": "ON", "fach": "1"}},
+    {"nr": "A2", "titel": "Avancier Marsch", "ort": {"schrank": "ON", "fach": "1"}},
+    {"nr": "A2", "titel": "Sehnsucht nach der Heimat", "ort": {"schrank": "ON", "fach": "1"}},
+    {"nr": "A2", "titel": "Freiheit und Frieden", "ort": {"schrank": "ON", "fach": "1"}},
+    {"nr": "A3", "titel": "Ascona", "ort": {"schrank": "ON", "fach": "1"}},
     {"nr": "A4", "titel": "Platzhalter", "ort": {"schrank": "ON", "fach": "1"}},
     {"nr": "A5", "titel": "Platzhalter", "ort": {"schrank": "ON", "fach": "1"}},
     {"nr": "A6", "titel": "Platzhalter", "ort": {"schrank": "ON", "fach": "1"}},
@@ -955,6 +959,6 @@
     {"nr": 3, "code": "C44"},
     {"nr": 4, "code": "E2"},
     {"nr": 5, "code": "A1"},
-    {"nr": 6, "code": "D1"}
+    {"nr": 6, "code": "A2"}
   ]
 }
