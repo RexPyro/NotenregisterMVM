@@ -157,10 +157,10 @@ function statusText(obj, labelOk, labelFehlt) {
   return '❔ Keine Info';
 }
 
-function openDetails(nr) {
-  const s = byCode[nr];
+function openDetails(id) {
+  const s = DATA.stuecke[id];
   if (!s) return;
-  const kat = DATA.kategorien.find(k => k.buchstabe === nr[0]);
+  const kat = DATA.kategorien.find(k => k.buchstabe === s.nr[0]);
   const rows = [
     ['Titel', esc(s.titel)],
     ['Komponist/Arrangeur', s.komponist ? esc(s.komponist) : '–'],
@@ -226,7 +226,7 @@ function render() {
     if (q && !items.length) return;
     hits += items.length;
     items.sort(sortMode === 'nr' ? byNr : byAz);
-    const rows = items.map(s => `<li id="p-${s.nr}"><span class="codecol"><span class="code">${hl(s.nr, q)}</span><button class="detailsLink" type="button" data-details="${s.nr}">Details</button></span><span class="t">${hl(s.titel, q)}${s.ort ? `<span class="sub">${esc(ortText(s.ort))}</span>` : ''}</span></li>`).join('');
+    const rows = items.map(s => `<li id="p-${s.nr}"><span class="codecol"><span class="code">${hl(s.nr, q)}</span><button class="detailsLink" type="button" data-details="${s._id}">Details</button></span><span class="t">${hl(s.titel, q)}${s.ort ? `<span class="sub">${esc(ortText(s.ort))}</span>` : ''}</span></li>`).join('');
     html += section(k.buchstabe, `${k.buchstabe} – ${esc(k.name)}`, items.length, `<ul>${rows || '<li>Noch keine Stücke</li>'}</ul>`, q ? true : undefined);
   });
 
@@ -268,7 +268,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smoot
 
 fetch('noten.json', {cache: 'no-cache'})
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-  .then(d => { DATA = d; byCode = Object.fromEntries(d.stuecke.map(s => [s.nr, s])); render(); })
+  .then(d => { DATA = d; DATA.stuecke.forEach((s, i) => { s._id = i; }); byCode = Object.fromEntries(d.stuecke.map(s => [s.nr, s])); render(); })
   .catch(() => { root.innerHTML = '<p class="empty">noten.json konnte nicht geladen werden.<br>Die Seite muss über einen Webserver (z. B. GitHub Pages) geöffnet werden.</p>'; });
 </script>
 </body>
