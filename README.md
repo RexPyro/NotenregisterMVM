@@ -41,10 +41,15 @@ JSON format:
     {"nr": "G1", "titel": "Großer Gott, wir loben dich"},
     {"nr": "H1", "titel": "Zum Geburtstag viel Glück"}
   ],
+
+  Beim Programm kann man zusätzlich nach "code": "Nummer" noch "titel": "Titel" eingeben, aber nur, falls der Code mehrfach belegt ist und man sich spezifizieren will.
+  Man kann auch nur den Titel verwenden. Allerdings nur wenn der Titel NICHT mehrmals verwendet wird! (siehe "In Ewigkeit")
+
+  
   "programm": [
   
-    {"nr": 1, "code": "A3"},
-    {"nr": 2, "code": "B1"},
+    {"nr": 1, "code": "A3", "titel": "bester Marsch"},
+    {"nr": 2, "titel": "Ewig Schad"},
     {"nr": 3, "code": "C44"},
     {"nr": 4, "code": "E2"},
     {"nr": 5, "code": "A1"},
