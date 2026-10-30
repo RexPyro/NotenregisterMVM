@@ -90,7 +90,7 @@ li.flash{animation:fl 1.6s}
 
 
 <script>
-let DATA, byCode;
+let DATA;
 const $ = s => document.querySelector(s);
 const root = $('#root'), qEl = $('#q'), sortBtn = $('#sortBtn'), themeBtn = $('#themeBtn'), clearBtn = $('#clearBtn'), topBtn = $('#topBtn');
 const modalBackdrop = $('#modalBackdrop'), modalBody = $('#modalBody'), modalClose = $('#modalClose');
@@ -195,6 +195,15 @@ function unlockScroll() {
 
 function closeDetails() { modalBackdrop.classList.remove('show'); unlockScroll(); }
 
+// Ein Programmplatz kann "code" (Nummer) und/oder "titel" enthalten. Beides zusammen
+// grenzt eindeutig ein, wenn eine Nummer mehrfach belegt ist. Liefert alle Treffer.
+function resolveProg(p) {
+  const code = p.code ? String(p.code).trim() : '';
+  const titel = p.titel ? norm(String(p.titel).trim()) : '';
+  if (!code && !titel) return [];
+  return DATA.stuecke.filter(s => (!code || s.nr === code) && (!titel || norm(s.titel.trim()) === titel));
+}
+
 function section(id, title, count, body, forceOpen, cls = '') {
   const open = forceOpen ?? openSet.has(id);
   return `<details data-id="${id}" class="${cls}" ${open ? 'open' : ''}><summary>${title}<span class="cnt">${count}</span></summary>${body}</details>`;
@@ -213,9 +222,17 @@ function render() {
   }
 
   // 2) Aktuelles Programm
-  const prog = DATA.programm.map(p => ({...p, s: byCode[p.code]})).filter(p => p.s && matches(p.s, q));
+  const prog = DATA.programm.map(p => ({...p, c: resolveProg(p)}))
+    .filter(p => q ? p.c.some(s => matches(s, q)) : true);
   if (!q || prog.length) {
-    const rows = prog.map(p => `<li><span class="nr">${p.nr}</span><span class="t">${hl(p.s.titel, q)}</span><button class="code" data-goto="${p.code}" type="button">${hl(p.code, q)}</button></li>`).join('');
+    const rows = prog.map(p => {
+      if (!p.c.length) { // Nummer/Titel nicht gefunden -> sichtbar markieren statt still wegzulassen
+        const was = esc([p.code, p.titel].filter(Boolean).join(' / '));
+        return `<li><span class="nr">${p.nr}</span><span class="t sub">⚠ „${was}“ nicht gefunden</span></li>`;
+      }
+      const titel = p.c.map(s => hl(s.titel, q)).join(' / ');
+      return `<li><span class="nr">${p.nr}</span><span class="t">${titel}</span><button class="code" data-goto="${p.c[0]._id}" type="button">${hl(p.c[0].nr, q)}</button></li>`;
+    }).join('');
     html += section('prog', 'Aktuelles Sommerprogramm', prog.length, `<ol>${rows}</ol>`, q ? true : undefined);
   }
 
@@ -226,7 +243,7 @@ function render() {
     if (q && !items.length) return;
     hits += items.length;
     items.sort(sortMode === 'nr' ? byNr : byAz);
-    const rows = items.map(s => `<li id="p-${s.nr}"><span class="codecol"><span class="code">${hl(s.nr, q)}</span><button class="detailsLink" type="button" data-details="${s._id}">Details</button></span><span class="t">${hl(s.titel, q)}${s.ort ? `<span class="sub">${esc(ortText(s.ort))}</span>` : ''}</span></li>`).join('');
+    const rows = items.map(s => `<li id="p-${s._id}"><span class="codecol"><span class="code">${hl(s.nr, q)}</span><button class="detailsLink" type="button" data-details="${s._id}">Details</button></span><span class="t">${hl(s.titel, q)}${s.ort ? `<span class="sub">${esc(ortText(s.ort))}</span>` : ''}</span></li>`).join('');
     html += section(k.buchstabe, `${k.buchstabe} – ${esc(k.name)}`, items.length, `<ul>${rows || '<li>Noch keine Stücke</li>'}</ul>`, q ? true : undefined);
   });
 
@@ -248,11 +265,11 @@ root.addEventListener('click', e => {
   if (d) { openDetails(d.dataset.details); return; }
   const b = e.target.closest('[data-goto]');
   if (!b) return;
-  const code = b.dataset.goto;
+  const id = b.dataset.goto;
   qEl.value = '';
-  openSet.add(code[0]);
+  openSet.add(DATA.stuecke[id].nr[0]);
   render();
-  const li = document.getElementById('p-' + code);
+  const li = document.getElementById('p-' + id);
   if (li) { li.scrollIntoView({block: 'center'}); li.classList.add('flash'); }
 });
 
@@ -268,7 +285,7 @@ topBtn.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smoot
 
 fetch('noten.json', {cache: 'no-cache'})
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-  .then(d => { DATA = d; DATA.stuecke.forEach((s, i) => { s._id = i; }); byCode = Object.fromEntries(d.stuecke.map(s => [s.nr, s])); render(); })
+  .then(d => { DATA = d; DATA.stuecke.forEach((s, i) => { s._id = i; }); render(); })
   .catch(() => { root.innerHTML = '<p class="empty">noten.json konnte nicht geladen werden.<br>Die Seite muss über einen Webserver (z. B. GitHub Pages) geöffnet werden.</p>'; });
 </script>
 </body>
